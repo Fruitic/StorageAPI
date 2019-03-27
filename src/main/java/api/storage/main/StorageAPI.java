@@ -1,5 +1,7 @@
 package api.storage.main;
 
+import api.storage.util.Util;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Scanner;
@@ -12,8 +14,9 @@ public class StorageAPI {
         System.out.println("StorageAPI запущен");
     }
 
-    /** Configure Input Stream with default <b>InputStream</b>
-     * {@code System.in}
+    /**
+     *
+     * @return
      */
     public boolean configureInputStream() {
         return configureInputStream(System.in);
@@ -21,6 +24,7 @@ public class StorageAPI {
 
     /** Configure Input Stream by entering <b>InputStream</b> as
      * {@code 1st arg}
+     * Да, это сеттер
      */
     public boolean configureInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
@@ -29,6 +33,7 @@ public class StorageAPI {
 
     /** Configure Input Stream with default <b>OutputStream</b>
      * {@code System.out}
+     * Да, это сеттер
      */
     public boolean configureOutputStream() {
         return configureOutputStream(System.out);
@@ -36,6 +41,7 @@ public class StorageAPI {
 
     /** Configure Input Stream with default <b>OutputStream</b>
      * {@code  1st arg}
+     * Да, это сеттер
      */
     public boolean configureOutputStream(OutputStream out) {
         outputStream = out;
@@ -75,10 +81,11 @@ class ReadingThread extends Thread {
     @Override
     public void run() {
         Scanner sc = new Scanner(readFromInputStream);
+
         String commandLine;
         while (!(commandLine = sc.nextLine()).equalsIgnoreCase("exit")){
-            String commandName = commandLine.split(" ")[0];
-            System.out.println(commandName);
+            Util.isValidCommand(commandLine);
+
         }
     }
 }

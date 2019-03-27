@@ -1,6 +1,6 @@
 package api.storage.util;
 
-enum Command {
+public enum Command {
     NEWPRODUCT,
     PURCHASE,
     DEMAND,
