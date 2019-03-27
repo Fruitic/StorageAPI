@@ -2,14 +2,14 @@ package api.storage.main;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.Scanner;
 
 public class StorageAPI {
     private OutputStream outputStream;
+    private InputStream inputStream;
 
     public StorageAPI() {
-        System.out.println("StorageAPI запущен. Необходима конфигурация");
+        System.out.println("StorageAPI запущен");
     }
 
     /** Configure Input Stream with default <b>InputStream</b>
@@ -20,36 +20,48 @@ public class StorageAPI {
     }
 
     /** Configure Input Stream by entering <b>InputStream</b> as
-     * {@code 1st arg
+     * {@code 1st arg}
      */
     public boolean configureInputStream(InputStream inputStream) {
-        try {
-            Thread thread = new ReadingThread(inputStream, "Reading Thread");
-            thread.start();
-        } catch (Exception e) {
-            System.out.println("Неверный входной поток (это не ошибка вводимых пользователем данных)");
-            return false;
-        }
-        System.out.println("Введите команду (список команд и их параметры хранятся в README):");
+        this.inputStream = inputStream;
         return true;
     }
 
+    /** Configure Input Stream with default <b>OutputStream</b>
+     * {@code System.out}
+     */
     public boolean configureOutputStream() {
         return configureOutputStream(System.out);
     }
 
+    /** Configure Input Stream with default <b>OutputStream</b>
+     * {@code  1st arg}
+     */
     public boolean configureOutputStream(OutputStream out) {
         outputStream = out;
         return true;
     }
 
-    public void submitCommandStream() {
+    public boolean submitCommandStream() {
+        if (inputStream == null) {
+            System.out.println("Не определен входной поток данных. Будет использован стандарный поток");
+            System.out.println("Используйте configureInputStream() для изменения");
+            configureInputStream();
+        }
 
+        if (outputStream == null) {
+            System.out.println("Не определен выходной поток данных. Будет использован стандарный поток");
+            System.out.println("Используйте configureOutputStream() для изменения");
+            configureOutputStream();
+        }
+
+        Thread thread = new ReadingThread(inputStream, "Reading Thread");
+        thread.start();
+
+        System.out.println("Введите команду (список команд и их параметры хранятся в README):");
+
+        return true;
     }
-
-//    public void submitCommand(String) {
-//
-//    }
 }
 
 class ReadingThread extends Thread {
@@ -63,9 +75,10 @@ class ReadingThread extends Thread {
     @Override
     public void run() {
         Scanner sc = new Scanner(readFromInputStream);
-        String line;
-        while (!(line = sc.nextLine()).equalsIgnoreCase("exit")){
-            System.out.println(line);
+        String commandLine;
+        while (!(commandLine = sc.nextLine()).equalsIgnoreCase("exit")){
+            String commandName = commandLine.split(" ")[0];
+            System.out.println(commandName);
         }
     }
 }
