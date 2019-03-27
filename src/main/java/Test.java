@@ -5,5 +5,6 @@ public class Test {
         StorageAPI api = new StorageAPI();
         api.configureInputStream(System.in);
         api.configureOutputStream();
+        api.submitCommandStream();
     }
 }

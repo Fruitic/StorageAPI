@@ -1,21 +1,26 @@
 package api.storage.main;
 
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 public class StorageAPI {
+    private OutputStream outputStream;
+
     public StorageAPI() {
         System.out.println("StorageAPI запущен. Необходима конфигурация");
     }
 
     /** Configure Input Stream with default <b>InputStream</b>
-     * <i>System.in</i>
+     * {@code System.in}
      */
     public boolean configureInputStream() {
         return configureInputStream(System.in);
     }
 
-    /** Configure Input Stream by entering <b>InputStream</b> as 1st arg
+    /** Configure Input Stream by entering <b>InputStream</b> as
+     * {@code 1st arg
      */
     public boolean configureInputStream(InputStream inputStream) {
         try {
@@ -29,7 +34,16 @@ public class StorageAPI {
         return true;
     }
 
-    public void configureOutputStream() {
+    public boolean configureOutputStream() {
+        return configureOutputStream(System.out);
+    }
+
+    public boolean configureOutputStream(OutputStream out) {
+        outputStream = out;
+        return true;
+    }
+
+    public void submitCommandStream() {
 
     }
 
