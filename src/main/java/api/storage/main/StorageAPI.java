@@ -1,6 +1,3 @@
-/**
- *
- */
 package api.storage.main;
 
 import api.storage.util.Util;
@@ -37,9 +34,14 @@ public class StorageAPI {
      * Определяет входной поток {@code InputStream} потоком ввода {@code inputStream}
      * @param inputStream входной поток, наследуемый от {@code InputStream}
      * @return значение {@code true}, если сеттер сработал
+     *         значение {@code false}, если сеттер не сработал
      */
     public boolean configureInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
+        try {
+            this.inputStream = inputStream;
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
@@ -56,9 +58,13 @@ public class StorageAPI {
      * Определяет выходной поток {@code OutputStream} потоком вывода {@code outputStream}
      * @param outputStream выходной поток, наследуемый от {@code OutputStream}
      * @return значение {@code true}, если сеттер сработал
+     *         значение {@code false}, если сеттер не сработал
      */
     public boolean configureOutputStream(OutputStream outputStream) {
-        this.outputStream = outputStream;
+        try {
+            this.outputStream = outputStream;} catch (Exception e) {
+        return false;
+    }
         return true;
     }
 
@@ -101,7 +107,6 @@ class ReadingThread extends Thread {
     public void run() {
         Scanner sc = new Scanner(readFromInputStream);
 
-        //TODO request valid args by command
         String commandLine;
         while (!(commandLine = sc.nextLine()).equalsIgnoreCase("exit")){
             String commandName = commandLine.split(" ")[0];
@@ -113,10 +118,8 @@ class ReadingThread extends Thread {
             // если аргументы введены неверно
             if (!Util.isValidCommandArgs(commandLine))
                continue;
-
+            assert true;
             //TODO: DB connection, DB tables
         }
     }
 }
-
-//TODO test coverage

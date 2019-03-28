@@ -1,17 +1,13 @@
-/**
+/** Nothing
+ * @author Fruitic
  * @see isValidCommandArgs
  */
 package api.storage.util;
-
-//TODO 4 commands.
 
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import static api.storage.util.Command.*;
 
