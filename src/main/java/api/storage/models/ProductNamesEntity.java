@@ -33,4 +33,11 @@ public class ProductNamesEntity {
     public int hashCode() {
         return Objects.hash(name);
     }
+
+    @Override
+    public String toString() {
+        return "ProductNamesEntity{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

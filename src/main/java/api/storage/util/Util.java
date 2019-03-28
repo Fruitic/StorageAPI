@@ -1,13 +1,16 @@
-/** Nothing
- * @author Fruitic
- * @see isValidCommandArgs
- */
 package api.storage.util;
 
+import api.storage.dao.ProductNamesDao;
+import api.storage.dao.StorageDao;
+import api.storage.models.ProductNamesEntity;
+import api.storage.models.StorageEntity;
 
+import javax.persistence.PersistenceException;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 
 import static api.storage.util.Command.*;
 
@@ -15,12 +18,6 @@ import static api.storage.util.Command.*;
  * Util класс. Javadoc исключительно для разработки, не использования конечным пользователем
  */
 public class Util {
-//    private static final List<String> commandList;
-//    static {
-//        commandList = new ArrayList<>();
-//        for (Command c : Command.values())
-//            commandList.add(c.toString());
-//    }
 
     private Util(){}
 
@@ -44,32 +41,35 @@ public class Util {
         return false;
     }
 
-    public static boolean isValidCommandArgs(String commandLine) {
+    public static boolean runCommand(String commandLine) {
         // Всё же стоило использовать более понятную систему работы с аргументами. Ну и ладно
         String[] commandLineArray = commandLine.split(" ");
 
-        switch (Command.valueOf(commandLineArray[0].toUpperCase())) {
+        switch (valueOf(commandLineArray[0].toUpperCase())) {
             case NEWPRODUCT: {
-                if (commandLineArray.length != 2) {
-                    System.out.println("ERROR. Неверное количество аргументов");
-                    return false; }
+                if (!isValidArgsAmountNewProduct(commandLineArray)) return false;
+                executeNewProduct(commandLineArray[1]);
                 return true;
             }
-            case PURCHASE:
+            case PURCHASE:{
+                if (!isValidArgsAmountPurchaseDemand(commandLineArray)) return false;
+                try {
+                    executePurchase(commandLineArray[1],
+                            Integer.parseInt(commandLineArray[2]),
+                            Float.parseFloat(commandLineArray[3]),
+                            Date.valueOf (new SimpleDateFormat("yyyy-MM-dd")
+                                    .format(new SimpleDateFormat("dd.MM.yyyy").parse(commandLineArray[4]))));
+                } catch (ParseException e) { return false; }
+                return true;
+            }
             case DEMAND: {
-                if (commandLineArray.length != 5) {
-                    System.out.println("ERROR. Неверное количество аргументов");
-                    return false; }
-                if (!isValidAmount(commandLineArray[2]))  { return false; }
-                if (!isValidPrice(commandLineArray[3]))  { return false; }
-                if (!isValidDate(commandLineArray[4]))  { return false; }
-                System.out.println("YAY");
+                if (!isValidArgsAmountPurchaseDemand(commandLineArray)) return false;
+//                executeDemand(commandLineArray);
                 return true;
             }
             case SALESREPORT: {
-                if (commandLineArray.length != 3) {
-                    System.out.println("ERROR. Неверное количество аргументов");
-                    return false; }
+                if (!isValidArgsAmountSalesReport(commandLineArray)) return false;
+//                executeSalesReport(commandLineArray);
                 return true;
             }
             default: {
@@ -79,18 +79,83 @@ public class Util {
         }
     }
 
+    private static boolean executePurchase(String name, int amount, float price, Date date) {
+        ProductNamesEntity product = new ProductNamesEntity();
+        product.setName(name);
+        ProductNamesDao pnDAO = new ProductNamesDao();
+        if (pnDAO.getByName(name) != null) {
+            StorageEntity storageEntity = new StorageEntity();
+            storageEntity.setAmount(amount);
+            storageEntity.setPrice(price);
+            storageEntity.setDate(date);
+            storageEntity.setName(name);
+            StorageDao storageDao = new StorageDao();
+            storageDao.save(storageEntity);
+            System.out.println("OK");
+        } else
+        {
+            System.out.println("ERROR. No such name of product. Use NEWPRODUCT");
+        }
+
+        return true;
+    }
+
+    private static boolean executeNewProduct(String name) {
+        ProductNamesEntity newProduct = new ProductNamesEntity();
+        newProduct.setName(name);
+        ProductNamesDao pnDAO = new ProductNamesDao();
+        try {
+            pnDAO.save(newProduct);
+        } catch (PersistenceException e) {
+            System.out.println("ERROR. Such name already getByName");
+            return false;
+        }
+        System.out.println("OK");
+        return true;
+    }
+
+    private static boolean isValidArgsAmountSalesReport(String[] commandLineArray) {
+        if (commandLineArray.length != 3) {
+            System.out.println("ERROR. Неверное количество аргументов");
+            return false; }
+        return true;
+    }
+
+    private static boolean isValidArgsAmountNewProduct(String[] commandLineArray) {
+        if (commandLineArray.length != 2) {
+            System.out.println("ERROR. Неверное количество аргументов");
+            return false; }
+        return true;
+    }
+
+    private static boolean isValidArgsAmountPurchaseDemand(String[] commandLineArray) {
+        if (commandLineArray.length != 5) {
+            System.out.println("ERROR. Неверное количество аргументов");
+            return false;
+        }
+        if (!isValidAmount(commandLineArray[2]))  {
+            return false;
+        }
+        if (!isValidPrice(commandLineArray[3]))  {
+            return false;
+        }
+        if (!isValidDate(commandLineArray[4]))  {
+            return false;
+        }
+        return true;
+    }
+
     private static boolean isValidDate(String date) {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        dateFormat.setLenient(true);
-        boolean result;
+
+        dateFormat.setLenient(false);
         try {
-            result = dateFormat.format(dateFormat.parse(date)).equals(date);
+            dateFormat.format(dateFormat.parse(date));
         } catch (ParseException e) {
             System.out.println("ERROR. Неверно указана дата");
             return false;
         }
-        if (!result) { System.out.println("ERROR. Неверно указана дата"); }
-        return result;
+        return true;
     }
 
     private static boolean isValidPrice(String price) {
@@ -106,4 +171,5 @@ public class Util {
         if (!result) { System.out.println("ERROR. Неверно указано количество товара"); }
         return result;
     }
+
 }

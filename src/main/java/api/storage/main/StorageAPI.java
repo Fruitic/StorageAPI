@@ -5,12 +5,15 @@ import api.storage.util.Util;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * √лавный класс API
  * @author Didenko Sergey AKA Fruitic
  */
 public class StorageAPI {
+
     private OutputStream outputStream;
     private InputStream inputStream;
 
@@ -18,6 +21,7 @@ public class StorageAPI {
      *  онструктор класса. ѕроихводит уведомление о запуске API
      */
     public StorageAPI() {
+        Logger.getLogger("org.hibernate").setLevel(Level.WARNING);
         System.out.println("StorageAPI запущен");
     }
 
@@ -114,12 +118,12 @@ class ReadingThread extends Thread {
             // если команды не существует
             if (!Util.isValidCommandName(commandLine))
                 continue;
-            // ѕроизводитс€ верификаци€ аргументов команды. ѕроизводит уведомление и переход к следующей итерации,
-            // если аргументы введены неверно
-            if (!Util.isValidCommandArgs(commandLine))
-               continue;
-            assert true;
-            //TODO: DB connection, DB tables
+
+            /* ¬ыполн€етс€ команда, параллельно валидиру€ данные
+            * ¬ случае провала валидации уведомл€ет пользовател€ и переходит к следующей итерации
+            * ¬ случае выполн€ет команду
+            */
+            Util.runCommand(commandLine);
         }
     }
 }

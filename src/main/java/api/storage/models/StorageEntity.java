@@ -8,8 +8,9 @@ import java.util.Objects;
 @Table(name = "storage", schema = "public", catalog = "StorageApiDb")
 public class StorageEntity {
     private int id;
+    private String name;
     private int amount;
-    private int price;
+    private double price;
     private Date date;
     private ProductNamesEntity productNamesByName;
 
@@ -24,6 +25,16 @@ public class StorageEntity {
     }
 
     @Basic
+    @Column(name = "name", nullable = false, length = 50)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Basic
     @Column(name = "amount", nullable = false)
     public int getAmount() {
         return amount;
@@ -35,11 +46,11 @@ public class StorageEntity {
 
     @Basic
     @Column(name = "price", nullable = false)
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -60,13 +71,14 @@ public class StorageEntity {
         StorageEntity that = (StorageEntity) o;
         return id == that.id &&
                 amount == that.amount &&
-                price == that.price &&
+                Double.compare(that.price, price) == 0 &&
+                Objects.equals(name, that.name) &&
                 Objects.equals(date, that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, amount, price, date);
+        return Objects.hash(id, name, amount, price, date);
     }
 
     @ManyToOne
