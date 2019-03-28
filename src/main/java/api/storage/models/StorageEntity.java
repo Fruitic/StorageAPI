@@ -90,4 +90,16 @@ public class StorageEntity {
     public void setProductNamesByName(ProductNamesEntity productNamesByName) {
         this.productNamesByName = productNamesByName;
     }
+
+    @Override
+    public String toString() {
+        return "StorageEntity{" +
+                "id=" + id +
+                ", name=" + name +
+                ", amount=" + amount +
+                ", price=" + price +
+                ", date=" + date +
+                ", productNamesByName=" + productNamesByName +
+                '}';
+    }
 }

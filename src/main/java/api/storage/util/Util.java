@@ -64,7 +64,13 @@ public class Util {
             }
             case DEMAND: {
                 if (!isValidArgsAmountPurchaseDemand(commandLineArray)) return false;
-//                executeDemand(commandLineArray);
+                try {
+                    executeDemand(commandLineArray[1],
+                            Integer.parseInt(commandLineArray[2]),
+                            Float.parseFloat(commandLineArray[3]),
+                            Date.valueOf (new SimpleDateFormat("yyyy-MM-dd")
+                                    .format(new SimpleDateFormat("dd.MM.yyyy").parse(commandLineArray[4]))));
+                } catch (ParseException e) { return false; }
                 return true;
             }
             case SALESREPORT: {
@@ -77,6 +83,36 @@ public class Util {
                 return false;
             }
         }
+    }
+
+    private static boolean executeDemand(String name, int amount, float price, Date date) {
+        ProductNamesEntity product = new ProductNamesEntity();
+        product.setName(name);
+        ProductNamesDao pnDAO = new ProductNamesDao();
+        if (pnDAO.getByName(name) != null) {
+            StorageEntity storageEntity = new StorageEntity();
+            storageEntity.setName(name);
+
+            // Отрицательное значение показывает выгрузку
+            storageEntity.setAmount(0 - amount);
+            storageEntity.setPrice(price);
+            storageEntity.setDate(date);
+
+            StorageDao storageDao = new StorageDao();
+            // Проверка на наличие товара для продажи
+            if (!storageDao.canDemand(amount, date)) {
+                System.out.println("ERROR. Not enough products for demanding. Sold me in past/future?");
+                return false;
+            }
+            storageDao.save(storageEntity);
+            System.out.println("OK");
+        } else
+        {
+            System.out.println("ERROR. No such name of product. Use NEWPRODUCT");
+            return false;
+        }
+
+        return true;
     }
 
     private static boolean executePurchase(String name, int amount, float price, Date date) {
@@ -95,6 +131,7 @@ public class Util {
         } else
         {
             System.out.println("ERROR. No such name of product. Use NEWPRODUCT");
+            return false;
         }
 
         return true;
@@ -146,6 +183,11 @@ public class Util {
     }
 
     private static boolean isValidDate(String date) {
+        if (!date.matches("^\\d+[.]\\d+[.]\\d\\d\\d\\d$")) {
+            System.out.println("ERROR. Неверно указана дата");
+            return false;
+        }
+
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
         dateFormat.setLenient(false);
