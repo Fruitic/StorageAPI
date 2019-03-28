@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="api.storage.models.StorageEntity" table="storage" schema="public" catalog="StorageApiDb">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+            <generator class="increment"/>
+        </id>
+        <property name="name">
+            <column name="name" sql-type="char(50)" length="50"/>
+        </property>
+        <property name="amount">
+            <column name="amount" sql-type="integer"/>
+        </property>
+        <property name="price">
+            <column name="price" sql-type="double precision" precision="-1"/>
+        </property>
+        <property name="date">
+            <column name="date" sql-type="date"/>
+        </property>
+    </class>
+</hibernate-mapping>

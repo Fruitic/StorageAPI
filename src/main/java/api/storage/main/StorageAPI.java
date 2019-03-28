@@ -1,6 +1,3 @@
-/**
- *
- */
 package api.storage.main;
 
 import api.storage.util.Util;
@@ -8,12 +5,15 @@ import api.storage.util.Util;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * √лавный класс API
- * @author Fruitic
+ * @author Didenko Sergey AKA Fruitic
  */
 public class StorageAPI {
+
     private OutputStream outputStream;
     private InputStream inputStream;
 
@@ -21,6 +21,7 @@ public class StorageAPI {
      *  онструктор класса. ѕроихводит уведомление о запуске API
      */
     public StorageAPI() {
+        Logger.getLogger("org.hibernate").setLevel(Level.WARNING);
         System.out.println("StorageAPI запущен");
     }
 
@@ -37,9 +38,14 @@ public class StorageAPI {
      * ќпредел€ет входной поток {@code InputStream} потоком ввода {@code inputStream}
      * @param inputStream входной поток, наследуемый от {@code InputStream}
      * @return значение {@code true}, если сеттер сработал
+     *         значение {@code false}, если сеттер не сработал
      */
     public boolean configureInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
+        try {
+            this.inputStream = inputStream;
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
@@ -56,9 +62,13 @@ public class StorageAPI {
      * ќпредел€ет выходной поток {@code OutputStream} потоком вывода {@code outputStream}
      * @param outputStream выходной поток, наследуемый от {@code OutputStream}
      * @return значение {@code true}, если сеттер сработал
+     *         значение {@code false}, если сеттер не сработал
      */
     public boolean configureOutputStream(OutputStream outputStream) {
-        this.outputStream = outputStream;
+        try {
+            this.outputStream = outputStream;} catch (Exception e) {
+        return false;
+    }
         return true;
     }
 
@@ -108,14 +118,12 @@ class ReadingThread extends Thread {
             // если команды не существует
             if (!Util.isValidCommandName(commandLine))
                 continue;
-            // ѕроизводитс€ верификаци€ аргументов команды. ѕроизводит уведомление и переход к следующей итерации,
-            // если аргументы введены неверно
-            if (!Util.isValidCommandArgs(commandLine))
-               continue;
 
-            //TODO: DB connection, DB tables
+            /* ¬ыполн€етс€ команда, параллельно валидиру€ данные
+            * ¬ случае провала валидации уведомл€ет пользовател€ и переходит к следующей итерации
+            * ¬ случае выполн€ет команду
+            */
+            Util.runCommand(commandLine);
         }
     }
 }
-
-//TODO test coverage
