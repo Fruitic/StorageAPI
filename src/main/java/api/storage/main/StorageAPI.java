@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 /**
  * Главный класс API
- * @author Fruitic
+ * @author Didenko Sergey AKA Fruitic
  */
 public class StorageAPI {
     private OutputStream outputStream;
@@ -101,6 +101,7 @@ class ReadingThread extends Thread {
     public void run() {
         Scanner sc = new Scanner(readFromInputStream);
 
+        //TODO request valid args by command
         String commandLine;
         while (!(commandLine = sc.nextLine()).equalsIgnoreCase("exit")){
             String commandName = commandLine.split(" ")[0];
