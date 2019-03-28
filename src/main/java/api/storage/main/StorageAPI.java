@@ -10,44 +10,54 @@ public class StorageAPI {
     private OutputStream outputStream;
     private InputStream inputStream;
 
+    /**
+     * Конструктор класса. Проихводит уведомление о запуске API
+     */
     public StorageAPI() {
         System.out.println("StorageAPI запущен");
     }
 
     /**
-     *
-     * @return
+     * Определяет входной поток {@code InputStream} стандарным потоком ввода {@code System.in}
+     * @return значение {@code true}, если сеттер сработал
      */
     public boolean configureInputStream() {
         return configureInputStream(System.in);
     }
 
-    /** Configure Input Stream by entering <b>InputStream</b> as
-     * {@code 1st arg}
-     * Да, это сеттер
+    /**
+     * Определяет входной поток {@code InputStream} потоком ввода {@code inputStream}
+     * @param inputStream входной поток, наследуемый от {@code InputStream}
+     * @return значение {@code true}, если сеттер сработал
      */
     public boolean configureInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
         return true;
     }
 
-    /** Configure Input Stream with default <b>OutputStream</b>
-     * {@code System.out}
-     * Да, это сеттер
+    /**
+     * Определяет выходной поток {@code OutputStream} стандарным потоком вывода {@code System.out}
+     * @return значение {@code true}, если сеттер сработал
      */
     public boolean configureOutputStream() {
         return configureOutputStream(System.out);
     }
 
-    /** Configure Input Stream with default <b>OutputStream</b>
-     * {@code  1st arg}
-     * Да, это сеттер
+    /**
+     * Определяет выходной поток {@code OutputStream} потоком вывода {@code outputStream}
+     * @param outputStream выходной поток, наследуемый от {@code OutputStream}
+     * @return значение {@code true}, если сеттер сработал
      */
-    public boolean configureOutputStream(OutputStream out) {
-        outputStream = out;
+    public boolean configureOutputStream(OutputStream outputStream) {
+        this.outputStream = outputStream;
         return true;
     }
 
+    /**
+     * Производит генерацию отдельного потока для чтения строк команд
+     * Устанавливает стандартные потоки ввода-вывода, если они не бьыли оперделены ранее
+     * @return значение {@code true}, если поток успешно запущен
+     */
     public boolean submitCommandStream() {
         if (inputStream == null) {
             System.out.println("Не определен входной поток данных. Будет использован стандарный поток");
@@ -84,7 +94,10 @@ class ReadingThread extends Thread {
 
         String commandLine;
         while (!(commandLine = sc.nextLine()).equalsIgnoreCase("exit")){
-            Util.isValidCommand(commandLine);
+            // Производится валидация имени команды. Производит уведомление и переход к следующей строке,
+            // если команды не существует
+            if (!Util.isValidCommandName(commandLine))
+                continue;
 
         }
     }

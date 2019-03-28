@@ -8,7 +8,7 @@ public class Test {
     public static void main(String[] args) {
         StorageAPI api = new StorageAPI();
         log.debug("Is inputStream configured? " + api.configureInputStream(System.in));
-        log.debug("Is outputStream configured? " + api.configureOutputStream());
+        log.debug("Is outputStream configured? " + api.configureOutputStream(System.out));
         log.debug("Is CommandStream submitted? " + api.submitCommandStream());
     }
 }

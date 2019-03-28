@@ -6,11 +6,13 @@ public class Util {
     private Util(){}
 
     /**
-     *
-     * @param commandLine
-     * @return
+     * Произодит валидацию имени команды {@code commandName} из строки {@code commandLine}
+     * Уведомляет об ошибке в случае {@code false}
+     * @param commandLine значение типа {@code String|, содержащий как минимум один <i>non-space</i> символ
+     * @return значение {@code true}, если в перечислении {@code Command} имеется значение {@code commandName}
+     *         знвчение {@code false}, если в перечислении {@code Command} отсутствует значение {@code commandName}
      */
-    public static boolean isValidCommand(String commandLine) {
+    public static boolean isValidCommandName(String commandLine) {
         // Названием комманды является нулевой аргумент строки команды
         String commandName = commandLine.split(" ")[0];
 
