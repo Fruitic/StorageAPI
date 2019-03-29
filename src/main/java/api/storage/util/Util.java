@@ -10,7 +10,6 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 
 import static api.storage.util.Command.*;
 
@@ -75,7 +74,13 @@ public class Util {
             }
             case SALESREPORT: {
                 if (!isValidArgsAmountSalesReport(commandLineArray)) return false;
-//                executeSalesReport(commandLineArray);
+                try {
+                    executeSalesReport(commandLineArray[1], Date.valueOf (new SimpleDateFormat("yyyy-MM-dd")
+                            .format(new SimpleDateFormat("dd.MM.yyyy").parse(commandLineArray[2]))));
+                } catch (ParseException e) {
+                    return false;
+                }
+
                 return true;
             }
             default: {
@@ -85,7 +90,24 @@ public class Util {
         }
     }
 
-    private static boolean executeDemand(String name, int amount, float price, Date date) {
+    static boolean executeSalesReport(String name, Date date) {
+        ProductNamesEntity product = new ProductNamesEntity();
+        product.setName(name);
+        ProductNamesDao pnDAO = new ProductNamesDao();
+        if (pnDAO.getByName(name) != null) {
+            StorageDao storageDao = new StorageDao();
+            System.out.println(storageDao.calcProfit(name, date));
+        } else
+        {
+            System.out.println("ERROR. No such name of product. Use NEWPRODUCT");
+            return false;
+        }
+
+        return true;
+
+    }
+
+    static boolean executeDemand(String name, int amount, float price, Date date) {
         ProductNamesEntity product = new ProductNamesEntity();
         product.setName(name);
         ProductNamesDao pnDAO = new ProductNamesDao();
@@ -100,7 +122,7 @@ public class Util {
 
             StorageDao storageDao = new StorageDao();
             // ѕроверка на наличие товара дл€ продажи
-            if (!storageDao.canDemand(amount, date)) {
+            if (!storageDao.canDemand(name, amount, date)) {
                 System.out.println("ERROR. Not enough products for demanding. Sold me in past/future?");
                 return false;
             }
@@ -115,7 +137,7 @@ public class Util {
         return true;
     }
 
-    private static boolean executePurchase(String name, int amount, float price, Date date) {
+    static boolean executePurchase(String name, int amount, float price, Date date) {
         ProductNamesEntity product = new ProductNamesEntity();
         product.setName(name);
         ProductNamesDao pnDAO = new ProductNamesDao();
@@ -137,7 +159,7 @@ public class Util {
         return true;
     }
 
-    private static boolean executeNewProduct(String name) {
+    static boolean executeNewProduct(String name) {
         ProductNamesEntity newProduct = new ProductNamesEntity();
         newProduct.setName(name);
         ProductNamesDao pnDAO = new ProductNamesDao();
@@ -151,21 +173,21 @@ public class Util {
         return true;
     }
 
-    private static boolean isValidArgsAmountSalesReport(String[] commandLineArray) {
+    static boolean isValidArgsAmountSalesReport(String[] commandLineArray) {
         if (commandLineArray.length != 3) {
             System.out.println("ERROR. Ќеверное количество аргументов");
             return false; }
         return true;
     }
 
-    private static boolean isValidArgsAmountNewProduct(String[] commandLineArray) {
+    static boolean isValidArgsAmountNewProduct(String[] commandLineArray) {
         if (commandLineArray.length != 2) {
             System.out.println("ERROR. Ќеверное количество аргументов");
             return false; }
         return true;
     }
 
-    private static boolean isValidArgsAmountPurchaseDemand(String[] commandLineArray) {
+    static boolean isValidArgsAmountPurchaseDemand(String[] commandLineArray) {
         if (commandLineArray.length != 5) {
             System.out.println("ERROR. Ќеверное количество аргументов");
             return false;
@@ -182,7 +204,7 @@ public class Util {
         return true;
     }
 
-    private static boolean isValidDate(String date) {
+    static boolean isValidDate(String date) {
         if (!date.matches("^\\d+[.]\\d+[.]\\d\\d\\d\\d$")) {
             System.out.println("ERROR. Ќеверно указана дата");
             return false;
@@ -200,14 +222,14 @@ public class Util {
         return true;
     }
 
-    private static boolean isValidPrice(String price) {
+    static boolean isValidPrice(String price) {
         // рег.выражение дл€ стоимости
-        boolean result = price.matches("^([1-9][0-9]*)|(\\d+[.]\\d+)$");
+        boolean result = price.matches("^([1-9][0-9]*)|(\\d+[.]\\d*[1-9]+)$");
         if (!result) { System.out.println("ERROR. Ќеверно указана цена"); }
         return result;
     }
 
-    private static boolean isValidAmount(String amount) {
+    static boolean isValidAmount(String amount) {
         // рег.выражение дл€ количества
         boolean result = amount.matches("^[1-9][0-9]*$");
         if (!result) { System.out.println("ERROR. Ќеверно указано количество товара"); }
