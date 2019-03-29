@@ -78,8 +78,8 @@ public class Util {
             case SALESREPORT: {
                 if (!isValidArgsAmountSalesReport(commandLineArray)) return false;
                 try {
-                    executeSalesReport(commandLineArray[1], Date.valueOf (new SimpleDateFormat("yyyy-MM-dd")
-                            .format(new SimpleDateFormat("dd.MM.yyyy").parse(commandLineArray[2]))));
+                    System.out.println(executeSalesReport(commandLineArray[1], Date.valueOf (new SimpleDateFormat("yyyy-MM-dd")
+                            .format(new SimpleDateFormat("dd.MM.yyyy").parse(commandLineArray[2])))));
                 } catch (ParseException e) {
                     return false;
                 }
@@ -93,16 +93,16 @@ public class Util {
         }
     }
 
-    static boolean executeSalesReport(String name, Date date) {
+    static double executeSalesReport(String name, Date date) {
         ProductNamesEntity product = new ProductNamesEntity();
         product.setName(name);
         ProductNamesDao pnDAO = new ProductNamesDao();
+        double profit = 0;
         if (pnDAO.getByName(name) != null) {
             StorageDao storageDao = new StorageDao();
             List<Object[]> list = storageDao.getList(name, date);
 
             Queue<Product> queue = new ArrayDeque<>();
-            double profit = 0;
 
             for (Object[] o : list) {
                 int amount = -(int)o[0];
@@ -110,30 +110,32 @@ public class Util {
                 if (amount > 0) {
                     profit += amount * price;
                     Product tempProduct = queue.remove();
-                    while (amount >= Math.abs(tempProduct.amount)) {
+                    while (amount > Math.abs(tempProduct.amount)) {
                         profit += tempProduct.amount * tempProduct.price;
                         amount += tempProduct.amount;
                         tempProduct = queue.remove();
                     }
                     profit += -amount * tempProduct.price;
                     tempProduct.amount += amount;
-                    ((ArrayDeque<Product>) queue).addFirst(tempProduct);
+                    if (tempProduct.amount != 0) ((ArrayDeque<Product>) queue).addFirst(tempProduct);
                 } else {
                     queue.add(new Product(amount, price));
                 }
             }
-            System.out.println(profit);
         } else
         {
             System.out.println("ERROR. No such name of product. Use NEWPRODUCT");
-            return false;
         }
 
-        return true;
+        return profit;
 
     }
 
-    static boolean executeDemand(String name, int amount, float price, Date date) {
+    static boolean executeDemand(StorageEntity a) {
+        return executeDemand(a.getName(), a.getAmount(), a.getPrice(), a.getDate());
+    }
+
+    static boolean executeDemand(String name, int amount, double price, Date date) {
         ProductNamesEntity product = new ProductNamesEntity();
         product.setName(name);
         ProductNamesDao pnDAO = new ProductNamesDao();

@@ -14,15 +14,51 @@ import static org.junit.jupiter.api.Assertions.*;
 class UtilTest {
 
     @Test
-    void isValidCommandName() {
-    }
-
-    @Test
-    void runCommand() {
-    }
-
-    @Test
     void executeSalesReport() {
+        // Данные валидны. Имя валидно всегда
+
+        // Для несуществующего имени
+        String name = "kjhsfd;'e'132[";
+        Date date = Date.valueOf("2017-05-01");
+        assertEquals(0, Util.executeSalesReport(name, date));
+
+        // Нет записей покупки
+        Util.executeNewProduct(name);
+        assertEquals(0, Util.executeSalesReport(name, date));
+
+        StorageEntity[] storageEntities = new StorageEntity[] {
+                new StorageEntity(name, 5, 1000, Date.valueOf("2017-01-01")),
+                new StorageEntity(name, -10, 5000, Date.valueOf("2017-03-01")),
+                new StorageEntity(name, 10, 1500, Date.valueOf("2017-03-01")),
+                new StorageEntity(name, 85, 2000, Date.valueOf("2017-04-01")),
+                new StorageEntity(name, -90, 10000, Date.valueOf("2017-05-01")),
+                new StorageEntity(name, 10, 1000, Date.valueOf("2017-05-01"))
+        };
+        Util.executePurchase(storageEntities[0]);
+        Util.executePurchase(storageEntities[1]);
+        Util.executePurchase(storageEntities[2]);
+        // purchase = demand с отрицательным количеством. Значения валидны
+        Util.executePurchase(storageEntities[3]);
+        Util.executePurchase(storageEntities[4]);
+
+        try {
+            // Для существующих записей
+            assertEquals(0, Util.executeSalesReport(name, Date.valueOf("2017-02-28")));
+            assertEquals(37500, Util.executeSalesReport(name, Date.valueOf("2017-03-01")));
+            assertEquals(37500, Util.executeSalesReport(name, Date.valueOf("2017-03-02")));
+            assertEquals(37500, Util.executeSalesReport(name, Date.valueOf("2017-04-30")));
+            assertEquals(760000, Util.executeSalesReport(name, Date.valueOf("2017-05-01")));
+            assertEquals(760000, Util.executeSalesReport(name, Date.valueOf("2017-05-02")));
+        } catch (Exception e) {}
+        finally{
+            new StorageDao().drop(storageEntities[0]);
+            new StorageDao().drop(storageEntities[2]);
+            new StorageDao().drop(storageEntities[1]);
+            new StorageDao().drop(storageEntities[3]);
+            new StorageDao().drop(storageEntities[4]);
+
+            new ProductNamesDao().drop(new ProductNamesDao().getByName(name));
+        }
     }
 
     @Test
@@ -97,13 +133,13 @@ class UtilTest {
         // Имеет смысл тестировать только количество аргументов на правильных
         // командах. Валидность данных проводится тестами ниже
         // Валидность команды - тестами вышще
-        String[] salesReport = new String[]{"nEwPrOduct", "1312"};
+        String[] salesReport = new String[]{"nEwPrOduct", "1312", "2019-03-29"};
         assertTrue(Util.isValidArgsAmountSalesReport(salesReport));
 
-        salesReport = new String[]{"nEwPrOduct", "1312", "123", "123123.31231"};
+        salesReport = new String[]{"nEwPrOduct", "1312", "2019-03-29", "123123.31231"};
         assertFalse(Util.isValidArgsAmountSalesReport(salesReport));
 
-        salesReport = new String[]{"nEwPrOduct"};
+        salesReport = new String[]{"nEwPrOduct", "2019-03-29"};
         assertFalse(Util.isValidArgsAmountSalesReport(salesReport));
     }
 
