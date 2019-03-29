@@ -1,6 +1,12 @@
 package api.storage.util;
 
+import api.storage.dao.ProductNamesDao;
+import api.storage.dao.StorageDao;
+import api.storage.models.StorageEntity;
 import org.junit.jupiter.api.Test;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,10 +30,27 @@ class UtilTest {
 
     @Test
     void executePurchase() {
+        // Данные валидны. Имя валидно всегда
+        String name = "unkmown_name";
+        Date date = Date.valueOf("1990-01-01");
+        assertFalse(Util.executePurchase(name, 15, 20, date));
+
+        Util.executeNewProduct(name);
+        StorageEntity st = new StorageEntity();
+        st.setName(name); st.setDate(date); st.setAmount(15); st.setPrice(20);
+        assertTrue(Util.executePurchase(name, 15, 20, date));
+        new StorageDao().drop(st);
+        new ProductNamesDao().drop(new ProductNamesDao().getByName(name));
     }
 
     @Test
     void executeNewProduct() {
+        // Имя всегда валидно
+        Util.executeNewProduct("test");
+        assertFalse(Util.executeNewProduct("test"));
+
+        assertTrue(Util.executeNewProduct("TestyTest1122334455"));
+        new ProductNamesDao().drop(new ProductNamesDao().getByName("TestyTest1122334455"));
     }
 
     @Test

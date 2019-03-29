@@ -10,6 +10,9 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
+import java.util.List;
+import java.util.Queue;
 
 import static api.storage.util.Command.*;
 
@@ -96,7 +99,30 @@ public class Util {
         ProductNamesDao pnDAO = new ProductNamesDao();
         if (pnDAO.getByName(name) != null) {
             StorageDao storageDao = new StorageDao();
-            System.out.println(storageDao.calcProfit(name, date));
+            List<Object[]> list = storageDao.calcProfit(name, date);
+
+            Queue<Product> queue = new ArrayDeque<>();
+            double profit = 0;
+
+            for (Object[] o : list) {
+                int amount = -(int)o[0];
+                double price = (double)o[1];
+                if (amount > 0) {
+                    profit += amount * price;
+                    Product tempProduct = queue.remove();
+                    while (amount >= Math.abs(tempProduct.amount)) {
+                        profit += tempProduct.amount * tempProduct.price;
+                        amount += tempProduct.amount;
+                        tempProduct = queue.remove();
+                    }
+                    profit += -amount * tempProduct.price;
+                    tempProduct.amount += amount;
+                    ((ArrayDeque<Product>) queue).addFirst(tempProduct);
+                } else {
+                    queue.add(new Product(amount, price));
+                }
+            }
+            System.out.println(profit);
         } else
         {
             System.out.println("ERROR. No such name of product. Use NEWPRODUCT");
@@ -142,11 +168,14 @@ public class Util {
         product.setName(name);
         ProductNamesDao pnDAO = new ProductNamesDao();
         if (pnDAO.getByName(name) != null) {
+
             StorageEntity storageEntity = new StorageEntity();
             storageEntity.setAmount(amount);
             storageEntity.setPrice(price);
             storageEntity.setDate(date);
             storageEntity.setName(name);
+
+            // Сохранение
             StorageDao storageDao = new StorageDao();
             storageDao.save(storageEntity);
             System.out.println("OK");
@@ -166,7 +195,7 @@ public class Util {
         try {
             pnDAO.save(newProduct);
         } catch (PersistenceException e) {
-            System.out.println("ERROR. Such name already getByName");
+            System.out.println("ERROR. Such name already exists");
             return false;
         }
         System.out.println("OK");

@@ -21,7 +21,7 @@ public class StorageAPI {
      * Конструктор класса. Проихводит уведомление о запуске API
      */
     public StorageAPI() {
-        Logger.getLogger("org.hibernate").setLevel(Level.WARNING);
+        Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         System.out.println("StorageAPI запущен");
     }
 

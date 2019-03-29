@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "storage", schema = "public", catalog = "StorageApiDb")
-public class StorageEntity {
+public class StorageEntity implements DBEntity{
     private int id;
     private String name;
     private int amount;

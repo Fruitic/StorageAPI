@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "product_names", schema = "public", catalog = "StorageApiDb")
-public class ProductNamesEntity {
+public class ProductNamesEntity implements DBEntity{
     private String name;
 
     @Id
