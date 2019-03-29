@@ -163,7 +163,11 @@ public class Util {
         return true;
     }
 
-    static boolean executePurchase(String name, int amount, float price, Date date) {
+    static boolean executePurchase(StorageEntity a) {
+        return executePurchase(a.getName(), a.getAmount(), a.getPrice(), a.getDate());
+    }
+
+    static boolean executePurchase(String name, int amount, double price, Date date) {
         ProductNamesEntity product = new ProductNamesEntity();
         product.setName(name);
         ProductNamesDao pnDAO = new ProductNamesDao();

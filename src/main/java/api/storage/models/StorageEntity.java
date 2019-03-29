@@ -14,6 +14,18 @@ public class StorageEntity implements DBEntity{
     private Date date;
     private ProductNamesEntity productNamesByName;
 
+    public StorageEntity() {
+        super();
+    }
+
+    public StorageEntity(String name, int amount, double price, Date date) {
+        this.name = name;
+        this.amount = amount;
+        this.price = price;
+        this.date = date;
+        this.productNamesByName = productNamesByName;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     public int getId() {

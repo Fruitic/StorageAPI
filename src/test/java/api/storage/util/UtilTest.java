@@ -2,6 +2,7 @@ package api.storage.util;
 
 import api.storage.dao.ProductNamesDao;
 import api.storage.dao.StorageDao;
+import api.storage.models.ProductNamesEntity;
 import api.storage.models.StorageEntity;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +27,44 @@ class UtilTest {
 
     @Test
     void executeDemand() {
+        // Данные валидны. Имя валидно всегда
 
+        // Для несуществубщего имени
+        String name = "ahfaldlsajl13;'e'132[";
+        Date date = Date.valueOf("2017-05-01");
+        assertFalse(Util.executeDemand(name, 15, 20, date));
+
+        // Нет записей покупки
+        Util.executeNewProduct(name);
+        assertFalse(Util.executeDemand(name, 100, 2000, date));
+
+        StorageEntity[] storageEntities = new StorageEntity[] {
+                new StorageEntity(name, 5, 1000, Date.valueOf("2017-01-01")),
+                new StorageEntity(name, 10, 1000, Date.valueOf("2017-02-01")),
+                new StorageEntity(name, 85, 1000, Date.valueOf("2017-04-01"))
+        };
+        Util.executePurchase(storageEntities[0]);
+        Util.executePurchase(storageEntities[1]);
+        Util.executePurchase(storageEntities[2]);
+        StorageEntity st = new StorageEntity(name, -100, 2000, date);
+
+        // Для существующих записей
+        assertTrue(Util.executeDemand(name, 100, 2000, date));
+        new StorageDao().drop(st);
+
+        // Вставка записи при существующей отгрузке более поздней датой
+        // Попытка вставки создает ситуацию, в которой у будущей отгрузки не будет товара
+        Util.executeDemand(name, 100, 2000, date);
+        Date date1 = Date.valueOf("2017-03-01");
+        assertFalse(Util.executeDemand(name, 10, 2000, date1));
+        new StorageDao().drop(st);
+
+
+        new StorageDao().drop(storageEntities[0]);
+        new StorageDao().drop(storageEntities[2]);
+        new StorageDao().drop(storageEntities[1]);
+
+        new ProductNamesDao().drop(new ProductNamesDao().getByName(name));
     }
 
     @Test

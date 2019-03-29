@@ -1,9 +1,13 @@
 package api.storage.dao;
 
+import api.storage.models.DBEntity;
+import api.storage.models.StorageEntity;
 import api.storage.util.SessionFactoryUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import javax.persistence.PersistenceException;
 import java.sql.Date;
 import java.util.List;
 
@@ -53,5 +57,33 @@ public class StorageDao extends Dao{
         query.setParameter("name", name);
 
         return query.getResultList();
+    }
+
+    public boolean drop(StorageEntity storageEntity) {
+        Session session = SessionFactoryUtil.getSession();
+        Transaction tr = session.beginTransaction();
+        String hql = "SELECT s.id FROM StorageEntity AS s WHERE s.name = :name " +
+                "AND s.amount = :amount AND s.price = :price AND s.date = :date";
+        Query query = session.createQuery(hql);
+        query.setParameter("name", storageEntity.getName());
+        query.setParameter("date", storageEntity.getDate());
+        query.setParameter("amount", storageEntity.getAmount());
+        query.setParameter("price", storageEntity.getPrice());
+
+        List<Object> list = query.list();
+        for (Object o : list) {
+            storageEntity.setId((int)o);
+            session.delete(storageEntity);
+        }
+        boolean result = true;
+        try {
+            tr.commit();
+        } catch (PersistenceException e) {
+            System.out.println("NOT DROPPED");
+            result = false;
+        } finally {
+            session.close();
+            return result;
+        }
     }
 }

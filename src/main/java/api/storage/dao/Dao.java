@@ -21,13 +21,15 @@ public abstract class Dao {
         Session session = SessionFactoryUtil.getSession();
         Transaction tr = session.beginTransaction();
         session.delete(storageEntity);
+        boolean result = true;
         try {
             tr.commit();
         } catch (PersistenceException e) {
-            return false;
+            System.out.println("NOT DROPPED");
+            result = false;
         } finally {
             session.close();
+            return result;
         }
-        return true;
     }
 }
