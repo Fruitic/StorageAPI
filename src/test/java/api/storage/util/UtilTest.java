@@ -15,14 +15,14 @@ class UtilTest {
 
     @Test
     void executeSalesReport() {
-        // Данные валидны. Имя валидно всегда
+        // Р”Р°РЅРЅС‹Рµ РІР°Р»РёРґРЅС‹. РРјСЏ РІР°Р»РёРґРЅРѕ РІСЃРµРіРґР°
 
-        // Для несуществующего имени
+        // Р”Р»СЏ РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ РёРјРµРЅРё
         String name = "kjhsfd;'e'132[";
         Date date = Date.valueOf("2017-05-01");
         assertEquals(0, Util.executeSalesReport(name, date));
 
-        // Нет записей покупки
+        // РќРµС‚ Р·Р°РїРёСЃРµР№ РїРѕРєСѓРїРєРё
         Util.executeNewProduct(name);
         assertEquals(0, Util.executeSalesReport(name, date));
 
@@ -37,12 +37,12 @@ class UtilTest {
         Util.executePurchase(storageEntities[0]);
         Util.executePurchase(storageEntities[1]);
         Util.executePurchase(storageEntities[2]);
-        // purchase = demand с отрицательным количеством. Значения валидны
+        // purchase = demand СЃ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј РєРѕР»РёС‡РµСЃС‚РІРѕРј. Р—РЅР°С‡РµРЅРёСЏ РІР°Р»РёРґРЅС‹
         Util.executePurchase(storageEntities[3]);
         Util.executePurchase(storageEntities[4]);
 
         try {
-            // Для существующих записей
+            // Р”Р»СЏ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёС… Р·Р°РїРёСЃРµР№
             assertEquals(0, Util.executeSalesReport(name, Date.valueOf("2017-02-28")));
             assertEquals(37500, Util.executeSalesReport(name, Date.valueOf("2017-03-01")));
             assertEquals(37500, Util.executeSalesReport(name, Date.valueOf("2017-03-02")));
@@ -63,14 +63,14 @@ class UtilTest {
 
     @Test
     void executeDemand() {
-        // Данные валидны. Имя валидно всегда
+        // Р”Р°РЅРЅС‹Рµ РІР°Р»РёРґРЅС‹. РРјСЏ РІР°Р»РёРґРЅРѕ РІСЃРµРіРґР°
 
-        // Для несуществубщего имени
+        // Р”Р»СЏ РЅРµСЃСѓС‰РµСЃС‚РІСѓР±С‰РµРіРѕ РёРјРµРЅРё
         String name = "ahfaldlsajl13;'e'132[";
         Date date = Date.valueOf("2017-05-01");
         assertFalse(Util.executeDemand(name, 15, 20, date));
 
-        // Нет записей покупки
+        // РќРµС‚ Р·Р°РїРёСЃРµР№ РїРѕРєСѓРїРєРё
         Util.executeNewProduct(name);
         assertFalse(Util.executeDemand(name, 100, 2000, date));
 
@@ -84,12 +84,12 @@ class UtilTest {
         Util.executePurchase(storageEntities[2]);
         StorageEntity st = new StorageEntity(name, -100, 2000, date);
 
-        // Для существующих записей
+        // Р”Р»СЏ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёС… Р·Р°РїРёСЃРµР№
         assertTrue(Util.executeDemand(name, 100, 2000, date));
         new StorageDao().drop(st);
 
-        // Вставка записи при существующей отгрузке более поздней датой
-        // Попытка вставки создает ситуацию, в которой у будущей отгрузки не будет товара
+        // Р’СЃС‚Р°РІРєР° Р·Р°РїРёСЃРё РїСЂРё СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµР№ РѕС‚РіСЂСѓР·РєРµ Р±РѕР»РµРµ РїРѕР·РґРЅРµР№ РґР°С‚РѕР№
+        // РџРѕРїС‹С‚РєР° РІСЃС‚Р°РІРєРё СЃРѕР·РґР°РµС‚ СЃРёС‚СѓР°С†РёСЋ, РІ РєРѕС‚РѕСЂРѕР№ Сѓ Р±СѓРґСѓС‰РµР№ РѕС‚РіСЂСѓР·РєРё РЅРµ Р±СѓРґРµС‚ С‚РѕРІР°СЂР°
         Util.executeDemand(name, 100, 2000, date);
         Date date1 = Date.valueOf("2017-03-01");
         assertFalse(Util.executeDemand(name, 10, 2000, date1));
@@ -105,7 +105,7 @@ class UtilTest {
 
     @Test
     void executePurchase() {
-        // Данные валидны. Имя валидно всегда
+        // Р”Р°РЅРЅС‹Рµ РІР°Р»РёРґРЅС‹. РРјСЏ РІР°Р»РёРґРЅРѕ РІСЃРµРіРґР°
         String name = "unkmown_name";
         Date date = Date.valueOf("1990-01-01");
         assertFalse(Util.executePurchase(name, 15, 20, date));
@@ -120,7 +120,7 @@ class UtilTest {
 
     @Test
     void executeNewProduct() {
-        // Имя всегда валидно
+        // РРјСЏ РІСЃРµРіРґР° РІР°Р»РёРґРЅРѕ
         Util.executeNewProduct("test");
         assertFalse(Util.executeNewProduct("test"));
 
@@ -130,9 +130,9 @@ class UtilTest {
 
     @Test
     void isValidArgsAmountSalesReport() {
-        // Имеет смысл тестировать только количество аргументов на правильных
-        // командах. Валидность данных проводится тестами ниже
-        // Валидность команды - тестами вышще
+        // РРјРµРµС‚ СЃРјС‹СЃР» С‚РµСЃС‚РёСЂРѕРІР°С‚СЊ С‚РѕР»СЊРєРѕ РєРѕР»РёС‡РµСЃС‚РІРѕ Р°СЂРіСѓРјРµРЅС‚РѕРІ РЅР° РїСЂР°РІРёР»СЊРЅС‹С…
+        // РєРѕРјР°РЅРґР°С…. Р’Р°Р»РёРґРЅРѕСЃС‚СЊ РґР°РЅРЅС‹С… РїСЂРѕРІРѕРґРёС‚СЃСЏ С‚РµСЃС‚Р°РјРё РЅРёР¶Рµ
+        // Р’Р°Р»РёРґРЅРѕСЃС‚СЊ РєРѕРјР°РЅРґС‹ - С‚РµСЃС‚Р°РјРё РІС‹С€С‰Рµ
         String[] salesReport = new String[]{"nEwPrOduct", "1312", "2019-03-29"};
         assertTrue(Util.isValidArgsAmountSalesReport(salesReport));
 
@@ -145,9 +145,9 @@ class UtilTest {
 
     @Test
     void isValidArgsAmountNewProduct() {
-        // Имеет смысл тестировать только количество аргументов на правильных
-        // командах. Валидность данных проводится тестами ниже
-        // Валидность команды - тестами вышще
+        // РРјРµРµС‚ СЃРјС‹СЃР» С‚РµСЃС‚РёСЂРѕРІР°С‚СЊ С‚РѕР»СЊРєРѕ РєРѕР»РёС‡РµСЃС‚РІРѕ Р°СЂРіСѓРјРµРЅС‚РѕРІ РЅР° РїСЂР°РІРёР»СЊРЅС‹С…
+        // РєРѕРјР°РЅРґР°С…. Р’Р°Р»РёРґРЅРѕСЃС‚СЊ РґР°РЅРЅС‹С… РїСЂРѕРІРѕРґРёС‚СЃСЏ С‚РµСЃС‚Р°РјРё РЅРёР¶Рµ
+        // Р’Р°Р»РёРґРЅРѕСЃС‚СЊ РєРѕРјР°РЅРґС‹ - С‚РµСЃС‚Р°РјРё РІС‹С€С‰Рµ
         String[] newProduct = new String[]{"nEwPrOduct", "1312"};
         assertTrue(Util.isValidArgsAmountNewProduct(newProduct));
 
@@ -160,9 +160,9 @@ class UtilTest {
 
     @Test
     void isValidArgsAmountPurchaseDemand() {
-        // Имеет смысл тестировать только количество аргументов на правильных
-        // командах. Валидность данных проводится тестами ниже
-        // Валидность команды - тестами вышще
+        // РРјРµРµС‚ СЃРјС‹СЃР» С‚РµСЃС‚РёСЂРѕРІР°С‚СЊ С‚РѕР»СЊРєРѕ РєРѕР»РёС‡РµСЃС‚РІРѕ Р°СЂРіСѓРјРµРЅС‚РѕРІ РЅР° РїСЂР°РІРёР»СЊРЅС‹С…
+        // РєРѕРјР°РЅРґР°С…. Р’Р°Р»РёРґРЅРѕСЃС‚СЊ РґР°РЅРЅС‹С… РїСЂРѕРІРѕРґРёС‚СЃСЏ С‚РµСЃС‚Р°РјРё РЅРёР¶Рµ
+        // Р’Р°Р»РёРґРЅРѕСЃС‚СЊ РєРѕРјР°РЅРґС‹ - С‚РµСЃС‚Р°РјРё РІС‹С€С‰Рµ
         String[] demand = new String[]{"demand", "1312", "123", "123123.31231", "01.01.2019"};
         assertTrue(Util.isValidArgsAmountPurchaseDemand(demand));
 
@@ -178,31 +178,31 @@ class UtilTest {
     void isValidDate() {
         String date;
 
-        // Не число
-        date = "Катился";
+        // РќРµ С‡РёСЃР»Рѕ
+        date = "РљР°С‚РёР»СЃСЏ";
         assertFalse(Util.isValidPrice(date));
 
-        // Дата не по формату
+        // Р”Р°С‚Р° РЅРµ РїРѕ С„РѕСЂРјР°С‚Сѓ
         date = "2018:01:01";
         assertFalse(Util.isValidDate(date));
 
-        // несуществующий день
+        // РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РґРµРЅСЊ
         date = "29.02.2017";
         assertFalse(Util.isValidDate(date));
 
-        // несуществующий день 2
+        // РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РґРµРЅСЊ 2
         date = "299.02.2017";
         assertFalse(Util.isValidDate(date));
 
-        // несуществующий год (по крайней мере не ближайшие пару сотен тысяч лет)
+        // РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РіРѕРґ (РїРѕ РєСЂР°Р№РЅРµР№ РјРµСЂРµ РЅРµ Р±Р»РёР¶Р°Р№С€РёРµ РїР°СЂСѓ СЃРѕС‚РµРЅ С‚С‹СЃСЏС‡ Р»РµС‚)
         date = "29.02.201779";
         assertFalse(Util.isValidDate(date));
 
-        // существующий день
+        // СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РґРµРЅСЊ
         date = "01.01.2017";
         assertTrue(Util.isValidDate(date));
 
-        // Тестировать simpledateFormat по датам не то
+        // РўРµСЃС‚РёСЂРѕРІР°С‚СЊ simpledateFormat РїРѕ РґР°С‚Р°Рј РЅРµ С‚Рѕ
         date = "31.04.2017";
         assertFalse(Util.isValidDate(date));
 
@@ -210,34 +210,34 @@ class UtilTest {
 
     @Test
     void isValidPrice() {
-        // Предполагается, что товар не получен даром и не может быть подарен
+        // РџСЂРµРґРїРѕР»Р°РіР°РµС‚СЃСЏ, С‡С‚Рѕ С‚РѕРІР°СЂ РЅРµ РїРѕР»СѓС‡РµРЅ РґР°СЂРѕРј Рё РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїРѕРґР°СЂРµРЅ
         String price;
 
-        // Не число
-        price = "Катился";
+        // РќРµ С‡РёСЃР»Рѕ
+        price = "РљР°С‚РёР»СЃСЏ";
         assertFalse(Util.isValidPrice(price));
 
-        // Большое отрицательное
+        // Р‘РѕР»СЊС€РѕРµ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ
         price = "-100000";
         assertFalse(Util.isValidPrice(price));
 
-        // Незначительное отрицательное
+        // РќРµР·РЅР°С‡РёС‚РµР»СЊРЅРѕРµ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ
         price = "-1";
         assertFalse(Util.isValidPrice(price));
 
-        // Нуль
+        // РќСѓР»СЊ
         price = "0.000000000";
         assertFalse(Util.isValidPrice(price));
 
-        // Незначительное положительное с плавающей точкой
+        // РќРµР·РЅР°С‡РёС‚РµР»СЊРЅРѕРµ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ СЃ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№
         price = "0.00005";
         assertTrue(Util.isValidPrice(price));
 
-        // Незначительное положительное
+        // РќРµР·РЅР°С‡РёС‚РµР»СЊРЅРѕРµ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ
         price = "1";
         assertTrue(Util.isValidPrice(price));
 
-        // Большое положительное
+        // Р‘РѕР»СЊС€РѕРµ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ
         price = "100000000";
         assertTrue(Util.isValidPrice(price));
     }
@@ -246,31 +246,31 @@ class UtilTest {
     void isValidAmount() {
         String amount;
 
-        // Не число
-        amount = "Колобок";
+        // РќРµ С‡РёСЃР»Рѕ
+        amount = "РљРѕР»РѕР±РѕРє";
         assertFalse(Util.isValidAmount(amount));
 
-        // Большое отрицательное
+        // Р‘РѕР»СЊС€РѕРµ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ
         amount = "-100000";
         assertFalse(Util.isValidAmount(amount));
 
-        // Незначительное отрицательное
+        // РќРµР·РЅР°С‡РёС‚РµР»СЊРЅРѕРµ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ
         amount = "-1";
         assertFalse(Util.isValidAmount(amount));
 
-        // Нуль
+        // РќСѓР»СЊ
         amount = "0";
         assertFalse(Util.isValidAmount(amount));
 
-        // Незначительное положительное с плавающей точкой
+        // РќРµР·РЅР°С‡РёС‚РµР»СЊРЅРѕРµ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ СЃ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№
         amount = "0.00005";
         assertFalse(Util.isValidAmount(amount));
 
-        // Незначительное положительное
+        // РќРµР·РЅР°С‡РёС‚РµР»СЊРЅРѕРµ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ
         amount = "1";
         assertTrue(Util.isValidAmount(amount));
 
-        // Большое положительное
+        // Р‘РѕР»СЊС€РѕРµ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ
         amount = "100000000";
         assertTrue(Util.isValidAmount(amount));
     }

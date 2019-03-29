@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Главный класс API
+ * Р“Р»Р°РІРЅС‹Р№ РєР»Р°СЃСЃ API
  * @author Didenko Sergey AKA Fruitic
  */
 public class StorageAPI {
@@ -18,16 +18,16 @@ public class StorageAPI {
     private InputStream inputStream;
 
     /**
-     * Конструктор класса. Проихводит уведомление о запуске API
+     * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєР»Р°СЃСЃР°. РџСЂРѕРёС…РІРѕРґРёС‚ СѓРІРµРґРѕРјР»РµРЅРёРµ Рѕ Р·Р°РїСѓСЃРєРµ API
      */
     public StorageAPI() {
         Logger.getLogger("org.hibernate").setLevel(Level.OFF);
-        System.out.println("StorageAPI запущен");
+        System.out.println("StorageAPI Р·Р°РїСѓС‰РµРЅ");
     }
 
     /**
-     * Определяет входной поток {@code InputStream} стандарным потоком ввода {@code System.in}
-     * @return значение {@code true}, если сеттер сработал
+     * РћРїСЂРµРґРµР»СЏРµС‚ РІС…РѕРґРЅРѕР№ РїРѕС‚РѕРє {@code InputStream} СЃС‚Р°РЅРґР°СЂРЅС‹Рј РїРѕС‚РѕРєРѕРј РІРІРѕРґР° {@code System.in}
+     * @return Р·РЅР°С‡РµРЅРёРµ {@code true}, РµСЃР»Рё СЃРµС‚С‚РµСЂ СЃСЂР°Р±РѕС‚Р°Р»
      */
     @SuppressWarnings("UnusedReturnValue")
     public boolean configureInputStream() {
@@ -35,10 +35,10 @@ public class StorageAPI {
     }
 
     /**
-     * Определяет входной поток {@code InputStream} потоком ввода {@code inputStream}
-     * @param inputStream входной поток, наследуемый от {@code InputStream}
-     * @return значение {@code true}, если сеттер сработал
-     *         значение {@code false}, если сеттер не сработал
+     * РћРїСЂРµРґРµР»СЏРµС‚ РІС…РѕРґРЅРѕР№ РїРѕС‚РѕРє {@code InputStream} РїРѕС‚РѕРєРѕРј РІРІРѕРґР° {@code inputStream}
+     * @param inputStream РІС…РѕРґРЅРѕР№ РїРѕС‚РѕРє, РЅР°СЃР»РµРґСѓРµРјС‹Р№ РѕС‚ {@code InputStream}
+     * @return Р·РЅР°С‡РµРЅРёРµ {@code true}, РµСЃР»Рё СЃРµС‚С‚РµСЂ СЃСЂР°Р±РѕС‚Р°Р»
+     *         Р·РЅР°С‡РµРЅРёРµ {@code false}, РµСЃР»Рё СЃРµС‚С‚РµСЂ РЅРµ СЃСЂР°Р±РѕС‚Р°Р»
      */
     public boolean configureInputStream(InputStream inputStream) {
         try {
@@ -50,8 +50,8 @@ public class StorageAPI {
     }
 
     /**
-     * Определяет выходной поток {@code OutputStream} стандарным потоком вывода {@code System.out}
-     * @return значение {@code true}, если сеттер сработал
+     * РћРїСЂРµРґРµР»СЏРµС‚ РІС‹С…РѕРґРЅРѕР№ РїРѕС‚РѕРє {@code OutputStream} СЃС‚Р°РЅРґР°СЂРЅС‹Рј РїРѕС‚РѕРєРѕРј РІС‹РІРѕРґР° {@code System.out}
+     * @return Р·РЅР°С‡РµРЅРёРµ {@code true}, РµСЃР»Рё СЃРµС‚С‚РµСЂ СЃСЂР°Р±РѕС‚Р°Р»
      */
     @SuppressWarnings("UnusedReturnValue")
     public boolean configureOutputStream() {
@@ -59,10 +59,10 @@ public class StorageAPI {
     }
 
     /**
-     * Определяет выходной поток {@code OutputStream} потоком вывода {@code outputStream}
-     * @param outputStream выходной поток, наследуемый от {@code OutputStream}
-     * @return значение {@code true}, если сеттер сработал
-     *         значение {@code false}, если сеттер не сработал
+     * РћРїСЂРµРґРµР»СЏРµС‚ РІС‹С…РѕРґРЅРѕР№ РїРѕС‚РѕРє {@code OutputStream} РїРѕС‚РѕРєРѕРј РІС‹РІРѕРґР° {@code outputStream}
+     * @param outputStream РІС‹С…РѕРґРЅРѕР№ РїРѕС‚РѕРє, РЅР°СЃР»РµРґСѓРµРјС‹Р№ РѕС‚ {@code OutputStream}
+     * @return Р·РЅР°С‡РµРЅРёРµ {@code true}, РµСЃР»Рё СЃРµС‚С‚РµСЂ СЃСЂР°Р±РѕС‚Р°Р»
+     *         Р·РЅР°С‡РµРЅРёРµ {@code false}, РµСЃР»Рё СЃРµС‚С‚РµСЂ РЅРµ СЃСЂР°Р±РѕС‚Р°Р»
      */
     public boolean configureOutputStream(OutputStream outputStream) {
         try {
@@ -73,27 +73,27 @@ public class StorageAPI {
     }
 
     /**
-     * Производит генерацию отдельного потока для чтения строк команд
-     * Устанавливает стандартные потоки ввода-вывода, если они не бьыли оперделены ранее
-     * @return значение {@code true}, если поток успешно запущен
+     * РџСЂРѕРёР·РІРѕРґРёС‚ РіРµРЅРµСЂР°С†РёСЋ РѕС‚РґРµР»СЊРЅРѕРіРѕ РїРѕС‚РѕРєР° РґР»СЏ С‡С‚РµРЅРёСЏ СЃС‚СЂРѕРє РєРѕРјР°РЅРґ
+     * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РїРѕС‚РѕРєРё РІРІРѕРґР°-РІС‹РІРѕРґР°, РµСЃР»Рё РѕРЅРё РЅРµ Р±СЊС‹Р»Рё РѕРїРµСЂРґРµР»РµРЅС‹ СЂР°РЅРµРµ
+     * @return Р·РЅР°С‡РµРЅРёРµ {@code true}, РµСЃР»Рё РїРѕС‚РѕРє СѓСЃРїРµС€РЅРѕ Р·Р°РїСѓС‰РµРЅ
      */
     public boolean submitCommandStream() {
         if (inputStream == null) {
-            System.out.println("Не определен входной поток данных. Будет использован стандарный поток");
-            System.out.println("Используйте configureInputStream для изменения");
+            System.out.println("РќРµ РѕРїСЂРµРґРµР»РµРЅ РІС…РѕРґРЅРѕР№ РїРѕС‚РѕРє РґР°РЅРЅС‹С…. Р‘СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°РЅ СЃС‚Р°РЅРґР°СЂРЅС‹Р№ РїРѕС‚РѕРє");
+            System.out.println("РСЃРїРѕР»СЊР·СѓР№С‚Рµ configureInputStream РґР»СЏ РёР·РјРµРЅРµРЅРёСЏ");
             configureInputStream();
         }
 
         if (outputStream == null) {
-            System.out.println("Не определен выходной поток данных. Будет использован стандарный поток");
-            System.out.println("Используйте configureOutputStream для изменения");
+            System.out.println("РќРµ РѕРїСЂРµРґРµР»РµРЅ РІС‹С…РѕРґРЅРѕР№ РїРѕС‚РѕРє РґР°РЅРЅС‹С…. Р‘СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°РЅ СЃС‚Р°РЅРґР°СЂРЅС‹Р№ РїРѕС‚РѕРє");
+            System.out.println("РСЃРїРѕР»СЊР·СѓР№С‚Рµ configureOutputStream РґР»СЏ РёР·РјРµРЅРµРЅРёСЏ");
             configureOutputStream();
         }
 
         Thread thread = new ReadingThread(inputStream, "Reading Thread");
         thread.start();
 
-        System.out.println("Введите команду (список команд и их параметры хранятся в README):");
+        System.out.println("Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ (СЃРїРёСЃРѕРє РєРѕРјР°РЅРґ Рё РёС… РїР°СЂР°РјРµС‚СЂС‹ С…СЂР°РЅСЏС‚СЃСЏ РІ README):");
 
         return true;
     }
@@ -114,14 +114,14 @@ class ReadingThread extends Thread {
         String commandLine;
         while (!(commandLine = sc.nextLine()).equalsIgnoreCase("exit")){
             String commandName = commandLine.split(" ")[0];
-            // Производится валидация имени команды. Производит уведомление и переход к следующей итерации,
-            // если команды не существует
+            // РџСЂРѕРёР·РІРѕРґРёС‚СЃСЏ РІР°Р»РёРґР°С†РёСЏ РёРјРµРЅРё РєРѕРјР°РЅРґС‹. РџСЂРѕРёР·РІРѕРґРёС‚ СѓРІРµРґРѕРјР»РµРЅРёРµ Рё РїРµСЂРµС…РѕРґ Рє СЃР»РµРґСѓСЋС‰РµР№ РёС‚РµСЂР°С†РёРё,
+            // РµСЃР»Рё РєРѕРјР°РЅРґС‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚
             if (!Util.isValidCommandName(commandLine))
                 continue;
 
-            /* Выполняется команда, параллельно валидируя данные
-            * В случае провала валидации уведомляет пользователя и переходит к следующей итерации
-            * В случае выполняет команду
+            /* Р’С‹РїРѕР»РЅСЏРµС‚СЃСЏ РєРѕРјР°РЅРґР°, РїР°СЂР°Р»Р»РµР»СЊРЅРѕ РІР°Р»РёРґРёСЂСѓСЏ РґР°РЅРЅС‹Рµ
+            * Р’ СЃР»СѓС‡Р°Рµ РїСЂРѕРІР°Р»Р° РІР°Р»РёРґР°С†РёРё СѓРІРµРґРѕРјР»СЏРµС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ Рё РїРµСЂРµС…РѕРґРёС‚ Рє СЃР»РµРґСѓСЋС‰РµР№ РёС‚РµСЂР°С†РёРё
+            * Р’ СЃР»СѓС‡Р°Рµ РІС‹РїРѕР»РЅСЏРµС‚ РєРѕРјР°РЅРґСѓ
             */
             Util.runCommand(commandLine);
         }

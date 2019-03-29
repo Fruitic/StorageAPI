@@ -17,21 +17,21 @@ import java.util.Queue;
 import static api.storage.util.Command.*;
 
 /**
- * Util класс. Javadoc исключительно для разработки, не использования конечным пользователем
+ * Util РєР»Р°СЃСЃ. Javadoc РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅРѕ РґР»СЏ СЂР°Р·СЂР°Р±РѕС‚РєРё, РЅРµ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РєРѕРЅРµС‡РЅС‹Рј РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј
  */
 public class Util {
 
     private Util(){}
 
     /**
-     * Произодит валидацию имени команды {@code commandName} из строки {@code commandLine}
-     * Уведомляет об ошибке в случае {@code false}
-     * @param commandLine значение типа {@code String}, содержащий как минимум один <i>non-space</i> символ
-     * @return значение {@code true}, если в перечислении {@code Command} имеется значение {@code commandName}
-     *         знвчение {@code false}, если в перечислении {@code Command} отсутствует значение {@code commandName}
+     * РџСЂРѕРёР·РѕРґРёС‚ РІР°Р»РёРґР°С†РёСЋ РёРјРµРЅРё РєРѕРјР°РЅРґС‹ {@code commandName} РёР· СЃС‚СЂРѕРєРё {@code commandLine}
+     * РЈРІРµРґРѕРјР»СЏРµС‚ РѕР± РѕС€РёР±РєРµ РІ СЃР»СѓС‡Р°Рµ {@code false}
+     * @param commandLine Р·РЅР°С‡РµРЅРёРµ С‚РёРїР° {@code String}, СЃРѕРґРµСЂР¶Р°С‰РёР№ РєР°Рє РјРёРЅРёРјСѓРј РѕРґРёРЅ <i>non-space</i> СЃРёРјРІРѕР»
+     * @return Р·РЅР°С‡РµРЅРёРµ {@code true}, РµСЃР»Рё РІ РїРµСЂРµС‡РёСЃР»РµРЅРёРё {@code Command} РёРјРµРµС‚СЃСЏ Р·РЅР°С‡РµРЅРёРµ {@code commandName}
+     *         Р·РЅРІС‡РµРЅРёРµ {@code false}, РµСЃР»Рё РІ РїРµСЂРµС‡РёСЃР»РµРЅРёРё {@code Command} РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ Р·РЅР°С‡РµРЅРёРµ {@code commandName}
      */
     public static boolean isValidCommandName(String commandLine) {
-        // Названием комманды является нулевой аргумент строки команды
+        // РќР°Р·РІР°РЅРёРµРј РєРѕРјРјР°РЅРґС‹ СЏРІР»СЏРµС‚СЃСЏ РЅСѓР»РµРІРѕР№ Р°СЂРіСѓРјРµРЅС‚ СЃС‚СЂРѕРєРё РєРѕРјР°РЅРґС‹
         String commandName = commandLine.split(" ")[0];
 
         for (Command command : values()) {
@@ -44,7 +44,7 @@ public class Util {
     }
 
     public static boolean runCommand(String commandLine) {
-        // Всё же стоило использовать более понятную систему работы с аргументами. Ну и ладно
+        // Р’СЃС‘ Р¶Рµ СЃС‚РѕРёР»Рѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р±РѕР»РµРµ РїРѕРЅСЏС‚РЅСѓСЋ СЃРёСЃС‚РµРјСѓ СЂР°Р±РѕС‚С‹ СЃ Р°СЂРіСѓРјРµРЅС‚Р°РјРё. РќСѓ Рё Р»Р°РґРЅРѕ
         String[] commandLineArray = commandLine.split(" ");
 
         switch (valueOf(commandLineArray[0].toUpperCase())) {
@@ -87,7 +87,7 @@ public class Util {
                 return true;
             }
             default: {
-                System.out.println("Программная ошибка! Объявленна возможная комманда без её реализации");
+                System.out.println("РџСЂРѕРіСЂР°РјРјРЅР°СЏ РѕС€РёР±РєР°! РћР±СЉСЏРІР»РµРЅРЅР° РІРѕР·РјРѕР¶РЅР°СЏ РєРѕРјРјР°РЅРґР° Р±РµР· РµС‘ СЂРµР°Р»РёР·Р°С†РёРё");
                 return false;
             }
         }
@@ -143,13 +143,13 @@ public class Util {
             StorageEntity storageEntity = new StorageEntity();
             storageEntity.setName(name);
 
-            // Отрицательное значение показывает выгрузку
+            // РћС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РїРѕРєР°Р·С‹РІР°РµС‚ РІС‹РіСЂСѓР·РєСѓ
             storageEntity.setAmount(0 - amount);
             storageEntity.setPrice(price);
             storageEntity.setDate(date);
 
             StorageDao storageDao = new StorageDao();
-            // Проверка на наличие товара для продажи
+            // РџСЂРѕРІРµСЂРєР° РЅР° РЅР°Р»РёС‡РёРµ С‚РѕРІР°СЂР° РґР»СЏ РїСЂРѕРґР°Р¶Рё
             if (!storageDao.canDemand(name, amount, date)) {
                 System.out.println("ERROR. Not enough products for demanding. Sold me in past/future?");
                 return false;
@@ -181,7 +181,7 @@ public class Util {
             storageEntity.setDate(date);
             storageEntity.setName(name);
 
-            // Сохранение
+            // РЎРѕС…СЂР°РЅРµРЅРёРµ
             StorageDao storageDao = new StorageDao();
             storageDao.save(storageEntity);
             System.out.println("OK");
@@ -210,21 +210,22 @@ public class Util {
 
     static boolean isValidArgsAmountSalesReport(String[] commandLineArray) {
         if (commandLineArray.length != 3) {
-            System.out.println("ERROR. Неверное количество аргументов");
+            System.out.println("ERROR. РќРµРІРµСЂРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ Р°СЂРіСѓРјРµРЅС‚РѕРІ");
             return false; }
+        if (!isValidDate(commandLineArray[2])) { return false; }
         return true;
     }
 
     static boolean isValidArgsAmountNewProduct(String[] commandLineArray) {
         if (commandLineArray.length != 2) {
-            System.out.println("ERROR. Неверное количество аргументов");
+            System.out.println("ERROR. РќРµРІРµСЂРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ Р°СЂРіСѓРјРµРЅС‚РѕРІ");
             return false; }
         return true;
     }
 
     static boolean isValidArgsAmountPurchaseDemand(String[] commandLineArray) {
         if (commandLineArray.length != 5) {
-            System.out.println("ERROR. Неверное количество аргументов");
+            System.out.println("ERROR. РќРµРІРµСЂРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ Р°СЂРіСѓРјРµРЅС‚РѕРІ");
             return false;
         }
         if (!isValidAmount(commandLineArray[2]))  {
@@ -241,7 +242,7 @@ public class Util {
 
     static boolean isValidDate(String date) {
         if (!date.matches("^\\d+[.]\\d+[.]\\d\\d\\d\\d$")) {
-            System.out.println("ERROR. Неверно указана дата");
+            System.out.println("ERROR. РќРµРІРµСЂРЅРѕ СѓРєР°Р·Р°РЅР° РґР°С‚Р°");
             return false;
         }
 
@@ -251,23 +252,23 @@ public class Util {
         try {
             dateFormat.format(dateFormat.parse(date));
         } catch (ParseException e) {
-            System.out.println("ERROR. Неверно указана дата");
+            System.out.println("ERROR. РќРµРІРµСЂРЅРѕ СѓРєР°Р·Р°РЅР° РґР°С‚Р°");
             return false;
         }
         return true;
     }
 
     static boolean isValidPrice(String price) {
-        // рег.выражение для стоимости
+        // СЂРµРі.РІС‹СЂР°Р¶РµРЅРёРµ РґР»СЏ СЃС‚РѕРёРјРѕСЃС‚Рё
         boolean result = price.matches("^([1-9][0-9]*)|(\\d+[.]\\d*[1-9]+)$");
-        if (!result) { System.out.println("ERROR. Неверно указана цена"); }
+        if (!result) { System.out.println("ERROR. РќРµРІРµСЂРЅРѕ СѓРєР°Р·Р°РЅР° С†РµРЅР°"); }
         return result;
     }
 
     static boolean isValidAmount(String amount) {
-        // рег.выражение для количества
+        // СЂРµРі.РІС‹СЂР°Р¶РµРЅРёРµ РґР»СЏ РєРѕР»РёС‡РµСЃС‚РІР°
         boolean result = amount.matches("^[1-9][0-9]*$");
-        if (!result) { System.out.println("ERROR. Неверно указано количество товара"); }
+        if (!result) { System.out.println("ERROR. РќРµРІРµСЂРЅРѕ СѓРєР°Р·Р°РЅРѕ РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕРІР°СЂР°"); }
         return result;
     }
 
