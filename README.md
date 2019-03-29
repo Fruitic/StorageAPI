@@ -32,6 +32,10 @@
 <code>alter table storage </code> <br/>
 <code>  owner to "StorageApiUser"; </code> <br/><br/>
 
+## Параметры сборки
+Из-за наличия зависимостей сборщик дополнен assembly-плагином  `
+<code> mvn clean compile assembly:single </code>
+
 ## Инициализация
 Пример инициализации API  
 <code>StorageAPI api = new StorageAPI();</code>  
